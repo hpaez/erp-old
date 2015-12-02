@@ -1,0 +1,29 @@
+.thumbnail {
+    width: 171px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+#preview {
+    position: relative;
+}
+#preview a {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    display: none;
+}
+#file-info {
+    text-align: center;
+    display: block;
+}
+input[type=file] {
+    position: absolute;
+	visibility: hidden;
+	width: 0;
+	z-index: -9999;
+}
+#file-save {
+    text-align:center;
+    width: 171px;
+}
