@@ -34,6 +34,7 @@ if(isset($_POST['enviar'])){
             $carga=$_POST['carga'];
             $sexo=$_POST['sexo'];
             $fechanac=$_POST['fechanac'];
+            $sueldo=borrarCompleto($_POST['sueldo']);
             $fechaingreso=date('Y')."-".date('m')."-".date('d');
             $estado="1";
             $tmp_name=$_FILES['archivo']['tmp_name'];
@@ -41,7 +42,7 @@ if(isset($_POST['enviar'])){
             $foto=str_replace('-','',str_replace('.','',$rut)).".png";
             move_uploaded_file($_FILES['archivo']['tmp_name'],"../../img/usuarios/".$foto);
             $fechaingreso=date('Y')."-".date('m')."-".date('d');
-            $csql="insert into trabajador values ('$rut','$nombre','$apellidop','$apellidom','".fecha_bd($fechanac)."','$fechaingreso','$sexo','$direccion','$email','$telefono','$carga','$cargo','$afp','$isapre','$contrato','$caja','$finiquito','$password','$estado')";
+            $csql="insert into trabajador values ('$rut','$nombre','$apellidop','$apellidom','".fecha_bd($fechanac)."','$fechaingreso','$sexo','$direccion','$email','$telefono','$sueldo','$carga','$cargo','$afp','$isapre','$contrato','$caja','$finiquito','$password','$estado')";
             mysql_query($csql);
             echo"<script>alert('Se ha ingresado un nuevo empleado');</script>";
         } else {
@@ -202,9 +203,19 @@ if(isset($_POST['enviar'])){
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="direccion" name="direccion" required maxlength="40">
-                                                <label for="direccion">Dirección</label>
+                                            <div class="row">
+												<div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" id="direccion" name="direccion" required maxlength="40">
+                                                        <label for="direccion">Dirección</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control peso-mask" id="sueldo" name="sueldo" required maxlength="10">
+                                                        <label for="sueldo">Sueldo</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="row">
 												<div class="col-sm-6">

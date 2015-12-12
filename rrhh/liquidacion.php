@@ -23,9 +23,6 @@ if($_SESSION['cargo_user']!="Administrador"){
 		<link type="text/css" rel="stylesheet" href="../css/materialadmin.css" />
 		<link type="text/css" rel="stylesheet" href="../css/font-awesome.min.css" />
 		<link type="text/css" rel="stylesheet" href="../css/material-design-iconic-font.min.css" />
-		<link type="text/css" rel="stylesheet" href="../css/libs/DataTables/jquery.dataTables.css" />
-		<link type="text/css" rel="stylesheet" href="../css/libs/DataTables/extensions/dataTables.colVis.css" />
-		<link type="text/css" rel="stylesheet" href="../css/libs/DataTables/extensions/dataTables.tableTools.css" />
 		<!-- END STYLESHEETS -->
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -111,12 +108,12 @@ if($_SESSION['cargo_user']!="Administrador"){
                                     <div class="card-head style-primary">
 										<header>Generar Liquidación</header>
 									</div>
-                                    <form class="form form-validate floating-label" action="<?php echo $_SERVER['PHP_SELF']; ?>" accept-charset="utf-8" method="post" enctype="multipart/form-data" novalidate>
+                                    <form class="form form-validate floating-label" id="formulario" name="formulario" action="<?php echo $_SERVER['PHP_SELF']; ?>" accept-charset="utf-8" method="post" enctype="multipart/form-data" novalidate>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <select id="rut" name="rut" class="form-control" required>
+                                                        <select id="rut" name="rut" class="form-control" required onChange="buscarSueldo(),buscarAfp()">
                                                             <option value="">&nbsp;</option>
                                                             <?php
                                                                 $ru=mysql_query("select rut from trabajador where estado='1'");
@@ -132,7 +129,7 @@ if($_SESSION['cargo_user']!="Administrador"){
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="sueldo" name="sueldo" required>
+                                                        <div class="form-control" id="resultadoBusqueda" name="resultadoBusqueda"></div>
                                                         <label for="sueldo">Sueldo</label>
                                                     </div>
                                                 </div>
@@ -140,27 +137,27 @@ if($_SESSION['cargo_user']!="Administrador"){
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="graficacion" name="graficacion" required>
-                                                        <label for="graficacion">Graficación</label>
+                                                        <input id="gratificacion" class="form-control" readonly type="number" name="gratificacion" value="" onFocus="startCalc();" onBlur="stopCalc();"  required="" />
+                                                        <label for="gratificacion">Graficación</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="comision" name="comision" required>
-                                                        <label for="comision">Comisión</label>
+                                                        <input id="comisiones" class="form-control" type="number" name="comisiones" value="" onFocus="startCalc();" onBlur="stopCalc();" />
+                                                        <label for="comisiones">Comisión</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="bono1" name="bono1" required>
+                                                        <input id="bono1" type="number" class="form-control" name="bono1" value="" onFocus="startCalc();" onBlur="stopCalc();" />
                                                         <label for="bono1">Bono 1</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="bono2" name="bono2" required>
+                                                        <input id="bono2" class="form-control" type="number" name="bono2" value="" onFocus="startCalc();" onBlur="stopCalc();" />
                                                         <label for="bono2">Bono 2</label>
                                                     </div>
                                                 </div>
@@ -168,13 +165,13 @@ if($_SESSION['cargo_user']!="Administrador"){
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="horaextra" name="horaextra" required>
-                                                        <label for="horaextra">Hora Extra</label>
+                                                        <input id="hrsextras" class="form-control" type="number" name="hrsextras" value="" onFocus="startCalc();" onBlur="stopCalc();" />
+                                                        <label for="hrextra">Hora Extra</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="colacion" name="colacion" required>
+                                                        <input id="colacion" class="form-control" type="number" name="colacion" value="" onFocus="startCalc();" onBlur="stopCalc();" />
                                                         <label for="colacion">Colación</label>
                                                     </div>
                                                 </div>
@@ -182,55 +179,81 @@ if($_SESSION['cargo_user']!="Administrador"){
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="movilizacion" name="moviilizacion" required>
+                                                        <input id="movilizacion" class="form-control" type="number" name="movilizacion" value="" onFocus="startCalc();" onBlur="stopCalc();" />
                                                         <label for="movilizacion">Movilización</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="haber" name="haber" required>
-                                                        <label for="haber">Total Haber</label>
+                                                        <input id="totalhaberes" class="form-control" type="number" name="totalhaberes" readonly />
+                                                        <label for="totalhaberes">Total Haber</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="baseimponible" name="baseimponible" required>
+                                                        <input id="baseimponible" class="form-control" type="number" name="baseimponible" readonly />
                                                         <label for="baseimponible">Base Imponible</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" id="afp" name="afp" required>
-                                                        <label for="afp">AFP</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <div id="resultadoBusqueda2" class="form-control"></div>
+                                                            <label for="afp">AFP</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input id="afpcalc" class="form-control" name="afpcalc" readonly />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" id="isapre" name="isapre" required>
-                                                        <label for="isapre">ISAPRE</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input id="isapre" class="form-control" type="number" name="isapre" value="" readonly />
+                                                            <label for="isapre">ISAPRE</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input id="isapre" class="form-control" type="number" name="isapre" value="" readonly />
+                                                            <label for="isapre">ISAPRE</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="bimponible" name="bimponible" required>
-                                                        <label for="bimponible">Base Imponible</label>
+                                                        <input id="baseimponibleseg" class="form-control" type="number" name="baseimponibleseg" readonly />
+                                                        <label for="baseimponibleseg">Base Imponible</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" id="seguro" name="seguro" required>
-                                                        <label for="seguro">Seguro</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <select id="seguro" class="form-control" name="seguro" onFocus="startCalc();" onBlur="stopCalc();">
+                                                                <option value="1">Si</option>
+                                                                <option value="0">No</option>
+                                                            </select>
+                                                            <label for="seguro">Seguro de Cesantia</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input id="segurocalc" class="form-control" type="number" name="segurocalc" readonly />
+                                                            <label for="segurocalc">Seguro de Cesantia</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="apv" name="apv" required>
+                                                        <input id="apv" class="form-control" type="number" name="apv" onFocus="startCalc();" onBlur="stopCalc();" />
                                                         <label for="apv">APV</label>
                                                     </div>
                                                 </div>
@@ -238,13 +261,13 @@ if($_SESSION['cargo_user']!="Administrador"){
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="basetributable" name="basetributable" required>
+                                                        <input id="basetributable" class="form-control" type="number" name="basetributable" readonly />
                                                         <label for="basetributable">Base Tributable</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="impuesto" name="impuesto" required>
+                                                        <input id="impuesto" class="form-control" type="number" name="impuesto" readonly />
                                                         <label for="impuesto">Impuesto</label>
                                                     </div>
                                                 </div>
@@ -252,14 +275,14 @@ if($_SESSION['cargo_user']!="Administrador"){
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="descuento" name="descuento" required>
-                                                        <label for="descuento">Total Descuento</label>
+                                                        <input id="totaldescuentos" class="form-control" type="number" name="totaldescuentos" readonly />
+                                                        <label for="totaldescuento">Total Descuento</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="liquido" name="liquido" required>
-                                                        <label for="liquido">Total Liquido</label>
+                                                        <input id="sueldoliquido" class="form-control" type="number" name="sueldoliquido"  readonly />
+                                                        <label for="sueldoliquido">Total Liquido</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -401,27 +424,25 @@ if($_SESSION['cargo_user']!="Administrador"){
 		<!-- END BASE -->
 
 		<!-- BEGIN JAVASCRIPT -->
-		<script src="../js/libs/jquery/jquery-1.11.2.min.js"></script>
+        <script src="../js/libs/jquery/jquery-1.11.2.min.js"></script>
 		<script src="../js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
 		<script src="../js/libs/bootstrap/bootstrap.min.js"></script>
 		<script src="../js/libs/spin.js/spin.min.js"></script>
 		<script src="../js/libs/autosize/jquery.autosize.min.js"></script>
-        <script src="../js/libs/nanoscroller/jquery.nanoscroller.min.js"></script>
-        <script src="../js/libs/jquery-validation/dist/jquery.validate.min.js"></script>
-		<script src="../js/libs/jquery-validation/dist/additional-methods.min.js"></script>
-        <script src="../js/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-        <script src="../js/libs/dropzone/dropzone.min.js"></script>
-		<script src="../js/libs/inputmask/jquery.inputmask.bundle.min.js"></script>
+		<script src="../js/libs/nanoscroller/jquery.nanoscroller.min.js"></script>
 		<script src="../js/core/source/App.js"></script>
 		<script src="../js/core/source/AppNavigation.js"></script>
 		<script src="../js/core/source/AppOffcanvas.js"></script>
 		<script src="../js/core/source/AppCard.js"></script>
 		<script src="../js/core/source/AppForm.js"></script>
+		<script src="../js/core/source/AppNavSearch.js"></script>
 		<script src="../js/core/source/AppVendor.js"></script>
-        <script src="../js/core/demo/Demo.js"></script>
-		<script src="../js/core/demo/DemoFormComponents3.js"></script>
-        <script src="../js/ocultarpassword.js"></script>
+		<script src="../js/core/demo/Demo.js"></script>
+        <script src="../js/libs/inputmask/jquery.inputmask.bundle.min.js"></script>
+        <script src="../js/libs/jquery-validation/dist/jquery.validate.min.js"></script>
+		<script src="../js/libs/jquery-validation/dist/additional-methods.min.js"></script>
         <script src="../js/jquery.Rut.min.js"></script>
+        <script src="../js/calculoSueldo.js"></script>
         <script type="text/javascript">
 			$(document).ready(function(){
 				$('#rut').Rut({

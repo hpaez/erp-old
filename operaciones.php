@@ -27,6 +27,20 @@ function borrarPuntos($renta){
     return($miles);
 }
 
+function borrarGuion($renta){
+    $miles=str_replace('_','',$renta);
+    
+    return($miles);
+}
+
+function borrarCompleto($renta){
+    $miles=str_replace('.','',$renta);
+    $guionormal=str_replace('-','',$miles);
+    $guionbajo=str_replace('_','',$guionormal);
+    
+    return($guionbajo);
+}
+
 function generaPass(){
     $cadena = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     $longitudCadena=strlen($cadena);

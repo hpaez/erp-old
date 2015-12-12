@@ -24,8 +24,9 @@ if(isset($_POST['enviarm'])){
 	$caja=$_POST['caja'];
 	$finiquito=$_POST['finiquito'];
 	$estado=$_POST['estado'];
+    $sueldo=borrarCompleto($_POST['sueldo']);
 	
-	$csql="update trabajador set nombre='$nombre',apellidoPaterno='$paterno',apellidoMaterno='$materno',fechaNacimiento='$nacimiento',sexo='$sexo',email='$email',direccion='$direccion',telefono='$telefono',cargaFamiliar='$carga',cargo='$cargo',afp='$afp',isapre='$isapre', contrato='$contrato',caja='$caja',finiquito='$finiquito',estado='$estado' where rut='$rut'";
+	$csql="update trabajador set nombre='$nombre',apellidoPaterno='$paterno',apellidoMaterno='$materno',fechaNacimiento='$nacimiento',sexo='$sexo',email='$email',direccion='$direccion',telefono='$telefono',cargaFamiliar='$carga',cargo='$cargo',afp='$afp',isapre='$isapre', contrato='$contrato',caja='$caja',finiquito='$finiquito',estado='$estado',sueldo='$sueldo' where rut='$rut'";
 	mysql_query($csql);
 	echo "<script>alert('Los datos personales del RUT ".$_POST['rut']." han sido modificados');</script>";
 	echo"<script>window.location.href='actualizar.php';</script>";
@@ -173,7 +174,7 @@ if(isset($_POST['enviarm'])){
                                             <div class="row">
 												<div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <input type="email" class="form-control" id="email" name="email" maxlength="30"  value="<?php echo $datos_per['email']; ?>" required maxlength="40">
+                                                        <input type="email" class="form-control" id="email" name="email" maxlength="40"  value="<?php echo $datos_per['email']; ?>" required>
                                                         <label for="email">Correo Eletrónico</label>
                                                     </div>
                                                 </div>
@@ -184,9 +185,19 @@ if(isset($_POST['enviarm'])){
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $datos_per['direccion']; ?>">
-                                                <label for="direccion">Dirección</label>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $datos_per['direccion']; ?>" maxlength="40">
+                                                        <label for="direccion">Dirección</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control peso-mask" id="sueldo" name="sueldo" required maxlength="10" value="<?php echo $datos_per['sueldo']; ?>">
+                                                        <label for="sueldo">Sueldo</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="row">
 												<div class="col-sm-6">
@@ -206,7 +217,7 @@ if(isset($_POST['enviarm'])){
                                                                 <input type="radio" name="sexo" value="Masculino" <?php if($datos_per['sexo']=='Masculino'){?> checked <?php } ?>><span>Masculino</span>
                                                             </label>
                                                             <label class="radio-inline radio-styled">
-                                                                <input type="radio" name="sexo" value="Femenino" <?php if($datos_per['sexo']==1){?> checked <?php } ?>><span>Femenino</span>
+                                                                <input type="radio" name="sexo" value="Femenino" <?php if($datos_per['sexo']=='Femenino'){?> checked <?php } ?>><span>Femenino</span>
                                                             </label>
                                                         </div>
                                                     </div>
